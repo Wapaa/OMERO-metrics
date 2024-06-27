@@ -126,7 +126,7 @@ def center_viewer_group(request, conn=None, **kwargs):
         "group_description": group_description,
     }
     return render(
-        request, "metrics/omero_views/center_view_group.html", context
+        request, "metrics/omero_views/center_view_group_new.html", context
     )
 
 

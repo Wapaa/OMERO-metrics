@@ -8,6 +8,7 @@ from omero_metrics.dash_apps import (
     dash_dataset_psf_beads,
     dash_image_psf_beads,
     dash_dataset_metrics,
+    dash_group,
 )
 from .views import *
 from django.urls import re_path

@@ -26,6 +26,7 @@ from omero.gateway import (
     RoiWrapper,
     TagAnnotationWrapper,
     CommentAnnotationWrapper,
+    ChannelWrapper
 )
 
 from omero.model import (
@@ -174,6 +175,8 @@ def get_ref_from_object(obj) -> mm_schema.DataReference:
             obj_type = "COMMENT"
         case RoiWrapper():
             obj_type = "ROI"
+        case ChannelWrapper():
+            obj_type = "CHANNEL"
         case _:
             logger.error(f"Object type {type(obj)} is not supported")
 

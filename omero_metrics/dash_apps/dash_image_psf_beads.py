@@ -61,10 +61,8 @@ def update_image(*args, **kwargs):
     global image_bead
     image_omero = kwargs["session_state"]["context"]["image"]
     channel_index = int(args[0].split(" ")[-1])
-    channel_options = [
-        {"label": f"Channel {i}", "value": f"Channel {i}"}
-        for i in range(image_omero.shape[4])
-    ]
+    channel_names = kwargs["session_state"]["context"]["channel_names"]
+    channel_options = [{"label": c.name, "value": f"channel {i}"} for i, c in enumerate(channel_names.channels)]
     bead_index = int(args[1].split(" ")[-1])
     bead_properties_df = kwargs["session_state"]["context"][
         "bead_properties_df"

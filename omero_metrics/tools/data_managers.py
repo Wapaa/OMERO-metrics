@@ -59,7 +59,7 @@ TEMPLATE_MAPPINGS = {
 
 class DatasetManager:
     """
-    This class is a unit of work that processes data from a dataset or a dataset_collection (OMERO-project)
+    This class is a unit of work that processes data from a dataset or a dataset_collection (OMERO-metrics)
     It contains the data (microscope-metrics_schema datasets and dataset_collections) and the necessary methods
     to interact with OMERO and load and dump data.
     """
@@ -236,6 +236,44 @@ class DatasetManager:
             )
             self.template = TEMPLATE_MAPPINGS.get("unprocessed_analysis")
             self.context = {}
+
+    def save_settings(self):
+        pass
+
+    def delete_data(self):
+        pass
+
+
+class ProjectManager:
+    """
+    This class is a unit of work that processes data from a project (OMERO-metrics)
+    It contains the data and the necessary methods
+    to interact with OMERO and load and dump data.
+    """
+    def __init__(self, conn: BlitzGateway, project_id: int):
+        self._conn = conn
+        self.project_id = project_id
+        self.project = conn.getObject("Project", project_id)
+        self.datasets = None
+        self.unprocessed_datasets = None
+        self.processed_datasets = None
+        self.data = None
+        self.context = None
+
+    def load_data(self, force_reload=True):
+        if force_reload or self.data is None:
+            self.data = load.load_project(self._conn, self.project_id)
+            self.datasets = self.data["datasets"]
+            self.unprocessed_datasets = self.data["unprocessed_datasets"]
+            self.processed_datasets = self.data["processed_datasets"]
+            self.context = self.data["context"]
+        else:
+            raise NotImplementedError(
+                "partial loading of data from OMERO is not yet implemented"
+            )
+
+    def visualize_data(self):
+        pass
 
     def save_settings(self):
         pass

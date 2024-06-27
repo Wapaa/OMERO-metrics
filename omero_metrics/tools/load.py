@@ -147,9 +147,11 @@ def load_dash_data(
             )
             dash_context["key_values_df"] = get_key_values(dataset.output)
         elif isinstance(omero_object, ImageWrapper):
-            dash_context["image"] = load_image(
+            image = load_image(
                 omero_object, load_array=True
-            ).array_data
+            )
+            dash_context["image"] = image.array_data
+            channel_names = image.channel_series
             ann_id = df[
                 (df["Field_illumination_image"] == int(omero_object.getId()))
             ]["Intensity_profiles"].values[0]
@@ -166,15 +168,17 @@ def load_dash_data(
             dash_context["df_lines"] = df_lines_omero
             dash_context["df_rects"] = df_rects_omero
             dash_context["df_points"] = df_points_omero
+            dash_context["channel_names"] = channel_names
             dash_context["df_intensity_profiles"] = get_table_file_id(
                 conn, ann_id
             )
     elif isinstance(dataset, PSFBeadsDataset):
         dash_context["title"] = "PSF Beads Dataset"
         if isinstance(omero_object, DatasetWrapper):
-            dash_context["image"] = dataset.input.psf_beads_images[
-                0
-            ].array_data
+            image_psf = dataset.input.psf_beads_images[0]
+            dash_context["image"] = image_psf.array_data
+            dash_context["channel_names"] = image_psf.channel_series
+
             dash_context["bead_properties_df"] = get_table_file_id(
                 conn,
                 dataset.output.bead_properties.data_reference.omero_object_id,
@@ -192,12 +196,17 @@ def load_dash_data(
                 dataset.output.bead_profiles_z.data_reference.omero_object_id,
             )
             dash_context["image_id"] = dataset.input.psf_beads_images[0].data_reference.omero_object_id
+
         elif isinstance(omero_object, ImageWrapper):
-            dash_context["image"] = load_image(omero_object).array_data
+            image = load_image(omero_object)
+            dash_context["image"] = image.array_data
+            channel_names = image.channel_series
+
             dash_context["bead_properties_df"] = get_table_file_id(
                 conn,
                 dataset.output.bead_properties.data_reference.omero_object_id,
             )
+            dash_context["channel_names"] = channel_names
     else:
         dash_context = {}
     return dash_context
@@ -226,10 +235,18 @@ def load_image(
 ) -> mm_schema.Image:
     """Load an image from OMERO and return it as a schema Image"""
     time_series = None  # TODO: implement this
-    channel_series = None
+    channel_series = mm_schema.ChannelSeries(
+        channels=[
+            {"name": c.getName(),
+             "description": c.getDescription(),
+             "data_reference": omero_tools.get_ref_from_object(c),
+             "emission_wavelength_nm": c.getEmissionWave(),
+             "excitation_wavelength_nm": c.getExcitationWave(),
+             } for c in image.getChannels()
+        ]
+    )
     source_images = []
     array_data = _load_image_intensities(image) if load_array else None
-
     return mm_schema.Image(
         name=image.getName(),
         description=image.getDescription(),
