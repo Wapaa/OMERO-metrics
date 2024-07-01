@@ -98,7 +98,10 @@ dash_app_dataset.layout = dmc.MantineProvider(
                                                 "fontWeight": "bold",
                                                 "fontSize": 15,
                                             },
-                                            style_table={"overflowX": "auto",  "border-radius": "0.5rem"},
+                                            style_table={
+                                                "overflowX": "auto",
+                                                "border-radius": "0.5rem",
+                                            },
                                         ),
                                     ],
                                     span="6",

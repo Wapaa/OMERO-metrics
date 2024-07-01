@@ -26,7 +26,7 @@ from omero.gateway import (
     RoiWrapper,
     TagAnnotationWrapper,
     CommentAnnotationWrapper,
-    ChannelWrapper
+    ChannelWrapper,
 )
 
 from omero.model import (

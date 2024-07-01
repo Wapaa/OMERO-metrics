@@ -9,6 +9,7 @@ from omero_metrics.dash_apps import (
     dash_image_psf_beads,
     dash_dataset_metrics,
     dash_group,
+    dash_microscope,
 )
 from .views import *
 from django.urls import re_path
@@ -54,5 +55,6 @@ urlpatterns = [
         image_rois,
         name="webtest_image_rois",
     ),
+    re_path(r"^microscope", microscope_view, name="microscope"),
     # re_path(r'^(?P<data_type>[a-z]+)/(?P<image_id>[0-9]+)/, session_state_view, name='session_state'),
 ]

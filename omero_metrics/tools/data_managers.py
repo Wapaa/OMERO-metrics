@@ -250,6 +250,7 @@ class ProjectManager:
     It contains the data and the necessary methods
     to interact with OMERO and load and dump data.
     """
+
     def __init__(self, conn: BlitzGateway, project_id: int):
         self._conn = conn
         self.project_id = project_id
@@ -266,6 +267,39 @@ class ProjectManager:
             self.datasets = self.data["datasets"]
             self.unprocessed_datasets = self.data["unprocessed_datasets"]
             self.processed_datasets = self.data["processed_datasets"]
+            self.context = self.data["context"]
+        else:
+            raise NotImplementedError(
+                "partial loading of data from OMERO is not yet implemented"
+            )
+
+    def visualize_data(self):
+        pass
+
+    def save_settings(self):
+        pass
+
+    def delete_data(self):
+        pass
+
+
+class MicroscopeManager:
+    """
+    This class is a unit of work that processes data from a microscope (OMERO-metrics)
+    It contains the data and the necessary methods
+    to interact with OMERO and load and dump data.
+    """
+
+    def __init__(self, conn: BlitzGateway, microscope_id: int):
+        self._conn = conn
+        self.microscope_id = microscope_id
+        self.microscope = conn.getObject("Microscope", microscope_id)
+        self.data = None
+        self.context = None
+
+    def load_data(self, force_reload=True):
+        if force_reload or self.data is None:
+            self.data = load.load_microscope(self._conn, self.microscope_id)
             self.context = self.data["context"]
         else:
             raise NotImplementedError(

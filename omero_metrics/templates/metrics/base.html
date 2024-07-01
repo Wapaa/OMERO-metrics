@@ -20,13 +20,13 @@
   <body id="body-pd">
     <header class="header" id="header">
         <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
-        <div class="header_img"> <img src="{%static "images/photo.jpeg"%}"alt=""> </div>
+        <div class="header_img"> <img src="{%static "omero_metrics/images/photo.jpeg"%}"alt=""> </div>
     </header>
     <div class="l-navbar" id="nav-bar">
         <nav class="nav">
-            <div> <a href="#" class="nav_logo"> <img src="{%static "images/logo.png"%}" alt="", width="100"></a>
+            <div> <a href="#" class="nav_logo"> <img src="{%static "omero_metrics/images/logo.png"%}" alt="", width="100"></a>
                 <div class="nav_list"> 
-                  <a href="#" class="nav_link"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Dashboard</span> </a> 
+                  <a href="{%url "microscope"%}" class="nav_link"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Dashboard</span> </a>
                   <a href="{%url "foi_key_measurement"%}" class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Key Measurements</span> </a> 
                   <a href="#" class="nav_link"> <i class='bx bx-message-square-detail nav_icon'></i> <span class="nav_name">Unnamed</span> </a>
                    <a href="#" class="nav_link"> <i class='bx bx-bookmark nav_icon'></i> <span class="nav_name">Unnamed</span> </a>
@@ -37,9 +37,9 @@
         </nav>
     </div>
     <!--Container Main start-->
-    <div class="height-100 bg-light">
+    <div style="background-color:red;">
       {% block main_top%}{% endblock%}
-      <div class="container">
+      <div>
         {% block content%}{% endblock%}
       </div>
     </div>

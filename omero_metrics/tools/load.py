@@ -147,9 +147,7 @@ def load_dash_data(
             )
             dash_context["key_values_df"] = get_key_values(dataset.output)
         elif isinstance(omero_object, ImageWrapper):
-            image = load_image(
-                omero_object, load_array=True
-            )
+            image = load_image(omero_object, load_array=True)
             dash_context["image"] = image.array_data
             channel_names = image.channel_series
             ann_id = df[
@@ -195,7 +193,9 @@ def load_dash_data(
                 conn,
                 dataset.output.bead_profiles_z.data_reference.omero_object_id,
             )
-            dash_context["image_id"] = dataset.input.psf_beads_images[0].data_reference.omero_object_id
+            dash_context["image_id"] = dataset.input.psf_beads_images[
+                0
+            ].data_reference.omero_object_id
 
         elif isinstance(omero_object, ImageWrapper):
             image = load_image(omero_object)
@@ -237,12 +237,14 @@ def load_image(
     time_series = None  # TODO: implement this
     channel_series = mm_schema.ChannelSeries(
         channels=[
-            {"name": c.getName(),
-             "description": c.getDescription(),
-             "data_reference": omero_tools.get_ref_from_object(c),
-             "emission_wavelength_nm": c.getEmissionWave(),
-             "excitation_wavelength_nm": c.getExcitationWave(),
-             } for c in image.getChannels()
+            {
+                "name": c.getName(),
+                "description": c.getDescription(),
+                "data_reference": omero_tools.get_ref_from_object(c),
+                "emission_wavelength_nm": c.getEmissionWave(),
+                "excitation_wavelength_nm": c.getExcitationWave(),
+            }
+            for c in image.getChannels()
         ]
     )
     source_images = []

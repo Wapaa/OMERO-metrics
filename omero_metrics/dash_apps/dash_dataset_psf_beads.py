@@ -171,7 +171,10 @@ def func_psf_callback(*args, **kwargs):
     channel_index = int(args[0].split(" ")[-1])
     image_o = kwargs["session_state"]["context"]["image"]
     channel_names = kwargs["session_state"]["context"]["channel_names"]
-    channel_list_psf =[{"label": c.name, "value": f"channel {i}"} for i, c in enumerate(channel_names.channels)]
+    channel_list_psf = [
+        {"label": c.name, "value": f"channel {i}"}
+        for i, c in enumerate(channel_names.channels)
+    ]
     stack_z = np.max(image_o[0, :, :, :, channel_index], axis=0)
     bead_properties_df = kwargs["session_state"]["context"][
         "bead_properties_df"
@@ -227,7 +230,11 @@ def func_psf_callback(*args, **kwargs):
             + "<b>Considered Axial Edge:</b> %{customdata[1]} <br><extra></extra>",
         )
     )
-    return fig_image_z, channel_list_psf, df_properties_channel.to_dict("records")
+    return (
+        fig_image_z,
+        channel_list_psf,
+        df_properties_channel.to_dict("records"),
+    )
 
 
 @app.expanded_callback(
@@ -287,7 +294,9 @@ def callback_mip(*args, **kwargs):
 def line_graph_axis(bead_index, channel_index, axis, kwargs):
     df_axis = kwargs["session_state"]["context"][f"bead_{axis}_profiles_df"]
     image_id = kwargs["session_state"]["context"]["image_id"]
-    df_axis_3d = df_axis[df_axis.columns[df_axis.columns.str.startswith(str(image_id))]]
+    df_axis_3d = df_axis[
+        df_axis.columns[df_axis.columns.str.startswith(str(image_id))]
+    ]
     df_meta_x = pd.DataFrame(
         data=[
             [

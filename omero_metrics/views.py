@@ -8,6 +8,7 @@ from .tools.data_managers import DatasetManager
 
 @login_required()
 def index(request, conn=None, **kwargs):
+
     experimenter = conn.getUser()
     context = {
         "firstName": experimenter.firstName,
@@ -116,17 +117,18 @@ def center_viewer_project(request, project_id, conn=None, **kwargs):
 
 @login_required()
 def center_viewer_group(request, conn=None, **kwargs):
+    group2 = conn.SERVICE_OPTS.getOmeroGroup()
     group = conn.getGroupFromContext()
     group_id = group.getId()
     group_name = group.getName()
     group_description = group.getDescription()
     context = {
         "group_id": group_id,
-        "group_name": group_name,
+        "group_name": group2,
         "group_description": group_description,
     }
     return render(
-        request, "metrics/omero_views/center_view_group_new.html", context
+        request, "metrics/omero_views/center_view_group.html", context
     )
 
 
@@ -142,3 +144,9 @@ def center_viewer_dataset(request, dataset_id, conn=None, **kwargs):
     template = dm.template
     request.session["django_plotly_dash"] = dash_context
     return render(request, template_name=template)
+
+
+@login_required()
+def microscope_view(request, conn=None, **kwargs):
+    """Simply shows a page of ROI thumbnails for the specified image"""
+    return render(request, "metrics/microscope.html", {})

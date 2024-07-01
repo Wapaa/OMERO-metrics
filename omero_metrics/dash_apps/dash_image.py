@@ -129,7 +129,10 @@ def callback_test4(*args, **kwargs):
     df_points = kwargs["session_state"]["context"]["df_points"]
     df_point_channel = df_points[df_points["C"] == int(args[0][-1])].copy()
     channel_names = kwargs["session_state"]["context"]["channel_names"]
-    channel_list = [{"label": c.name, "value": f"channel {i}"} for i, c in enumerate(channel_names.channels)]
+    channel_list = [
+        {"label": c.name, "value": f"channel {i}"}
+        for i, c in enumerate(channel_names.channels)
+    ]
     fig = px.imshow(imaaa, zmin=0, zmax=255, color_continuous_scale=args[2])
     fig1 = px.imshow(imaaa, zmin=0, zmax=255, color_continuous_scale=args[2])
     fig1 = add_rect_rois(go.Figure(fig1), df_rects)
